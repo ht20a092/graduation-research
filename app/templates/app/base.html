@@ -1,0 +1,38 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>書籍検索システム</title>
+</head>
+<body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a href="/" class="navbar-brand">書籍検索</a>
+                <a href="{% url 'list' %}" class="navbar-brand">商品登録リスト</a>
+            </div>
+        </nav>
+
+    <main>
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <!--
+    <footer class="my-2 bg-dark">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Name</p>
+    </footer>
+    -->
+
+    {% block extra_js %}
+    {% endblock %}
+
+</body>
+</html>

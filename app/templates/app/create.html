@@ -1,0 +1,11 @@
+{% extends 'app/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+    <form method='POST'>
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type='submit' class="btn btn-primary" value="登録する">
+    </form>
+{% endblock content %}

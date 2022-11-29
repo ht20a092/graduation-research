@@ -1,0 +1,29 @@
+{% extends 'app/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+
+<h1>商品リスト</h1>
+<table class="table table-striped" >
+  <thead>
+    <tr>
+      <th scope="col">商品名</th>
+      <th scope="col">値段</th>
+      <th scope="col">URL</th>
+      <th scope="col">設定</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in object_list %}
+    <tr>
+      <td>{{ item.product_name }}</td>
+      <td>{{ item.price }}円</td>
+      <td>{{ item.url }}</td>
+      <td><a href="{% url 'delete' pk=item.id %}">削除</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
