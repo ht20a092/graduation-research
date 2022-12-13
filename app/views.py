@@ -7,9 +7,11 @@ import json
 import requests
 from django.urls import reverse_lazy
 
+# 楽天商品
+SEARCH_URL = 'https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?format=json&applicationId=1072722666659103303'
 
-# SEARCH_URL = 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20170404?format=json&applicationId=1072722666659103303'
-SEARCH_URL = 'https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404?format=json&applicationId=1072722666659103303'
+# 楽天ブックス
+SEARCH_URLL = 'https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404?format=json&applicationId=1072722666659103303'
 
 syouhinnmei ='シリコンバレー一流プログラマーが教える　Pythonプロフェッショナル大全'
 nedan ='2860'
@@ -40,21 +42,21 @@ class IndexView(View):
         if form.is_valid():
             keyword = form.cleaned_data['title']
             params = {
-                'title': keyword,
+                'keyword': keyword,
                 'hits' : 28,
             }
             items = get_api_data(params)
             book_data = []
             for i in items:
                 item = i['Item']
-                title = item['title']
-                image = item['largeImageUrl']
-                isbn = item['isbn']
+                itemName = item['itemName']
+                # imageUrl = item['imageUrl']
+                itemCode = item['itemCode']
                 itemPrice = item['itemPrice']
                 query = {
-                    'title': title,
-                    'image': image,
-                    'isbn': isbn,
+                    'itemName': itemName,
+                    # 'imageUrl': imageUrl,
+                    'itemCode': itemCode,
                     'itemPrice': itemPrice,
                 }
                 book_data.append(query)
@@ -71,38 +73,39 @@ class IndexView(View):
 class DetailView(View):
     def get(self, request, *args, **kwargs):
         
-        isbn = self.kwargs['isbn']
+        itemCode = self.kwargs['itemCode']
         params = {
-            'isbn': isbn
+            'itemCode': itemCode
         }
 
         items = get_api_data(params)
         items = items[0]
         item = items['Item']
-        title = item['title']
-        image = item['largeImageUrl']
+        itemName = item['itemName']
+        imageUrl = item['imageUrl']
         author = item['author']
         itemPrice = item['itemPrice']
         salesDate = item['salesDate']
         publisherName = item['publisherName']
         size = item['size']
-        isbn = item['isbn']
+        itemCode = item['itemCode']
         itemCaption = item['itemCaption']
         itemUrl = item['itemUrl']
         reviewAverage = item['reviewAverage']
         reviewCount = item['reviewCount']
 
-        syouhinnmei = title
+
 
         book_date = {
-            'title': title,
-            'image': image,
+            
+            'itemName': itemName,
+            'imageUrl': imageUrl,
             'author': author,
             'itemPrice': itemPrice,
             'salesDate': salesDate,
             'publisherName': publisherName,
             'size': size,
-            'isbn': isbn,
+            'itemCode': itemCode,
             'itemCaption': itemCaption,
             'itemUrl': itemUrl,
             'reviewAverage': reviewAverage,
@@ -148,6 +151,11 @@ class DeleteView(DeleteView):
 
 #　ここからはyahoo
 
+def get_api_dataa(params):
+    api = requests.get(SEARCH_URLL, params=params).text
+    result = json.loads(api)
+    items = result['Items']
+    return items
 
 
 class IndexView_f(View):
@@ -171,7 +179,7 @@ class IndexView_f(View):
                 'title': keyword,
                 'hits' : 28,
             }
-            items = get_api_data(params)
+            items = get_api_dataa(params)
             book_data = []
             for i in items:
                 item = i['Item']
@@ -204,8 +212,9 @@ class DetailView_f(View):
             'isbn': isbn
         }
 
-        items = get_api_data(params)
+        items = get_api_dataa(params)
         items = items[0]
+        
         item = items['Item']
         title = item['title']
         image = item['largeImageUrl']
@@ -220,9 +229,9 @@ class DetailView_f(View):
         reviewAverage = item['reviewAverage']
         reviewCount = item['reviewCount']
 
-        syouhinnmei = title
 
         book_date = {
+            
             'title': title,
             'image': image,
             'author': author,
@@ -265,4 +274,3 @@ class CreateView_f(CreateView):
           initial["url"] = yuarueru
           return initial
     
-
