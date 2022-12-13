@@ -1,0 +1,50 @@
+{% extends 'app/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+
+<div class="text-center my-5">
+    <div class="mb-5">
+        <h3>「{{ keyword }}」の検索結果</h3>
+    </div>
+
+        {% for book in book_data %}
+        <div class="card img-thumbnail booklist h-100">
+        <table class="table table-striped" >
+            <thead>
+              <tr>
+                <th scope="col">商品</th>
+                <th scope="col">タイトル</th>
+                <th scope="col">価格</th>
+              </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td><img src="{{ book.image }}"></td>
+                    <td>{{ book.title }}</td>
+                    <td>価格：{{ book.itemPrice }}円</td>
+                </tr>
+            </tbody>
+          </table>
+          <a href="{% url 'detail_f' book.isbn %}" class="stretched-link"></a>
+        </div>
+
+            <!-- 
+            <div class="col-3 mb-3">
+                <div class="card img-thumbnail booklist h-100">
+                    <img src="{{ book.image }}" alt="" class="card-img-top card-thum">
+                    <div class="card-body text-center px-2 py-3">
+                        <h5 class="font-weight-bold">{{ book.title }}</h5>
+                        <h5 class="font-weight-bold">価格：{{ book.itemPrice }}円</h5>
+                    </div>
+                    <a href="{% url 'detail' book.isbn %}" class="stretched-link"></a>
+                </div>
+            </div>
+            -->
+
+        {% endfor %}
+</div>
+
+{% endblock %}

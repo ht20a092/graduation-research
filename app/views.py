@@ -142,3 +142,127 @@ class DeleteView(DeleteView):
     template_name = 'app/delete.html'
     model = App
     success_url = reverse_lazy('list')
+
+
+
+
+#　ここからはyahoo
+
+
+
+class IndexView_f(View):
+    model = App#モデルを指定する
+    template_name = 'app/index_f.html'#テンプレートを指定する
+
+    def get(self, request, *args, **kwargs):
+        
+        form = SearchForm(request.POST or None)
+
+        return render(request, 'app/index_f.html', {
+            'form': form,
+        })
+    
+    def post(self, request, *args, **kwargs):
+        form = SearchForm(request.POST or None)
+
+        if form.is_valid():
+            keyword = form.cleaned_data['title']
+            params = {
+                'title': keyword,
+                'hits' : 28,
+            }
+            items = get_api_data(params)
+            book_data = []
+            for i in items:
+                item = i['Item']
+                title = item['title']
+                image = item['largeImageUrl']
+                isbn = item['isbn']
+                itemPrice = item['itemPrice']
+                query = {
+                    'title': title,
+                    'image': image,
+                    'isbn': isbn,
+                    'itemPrice': itemPrice,
+                }
+                book_data.append(query)
+
+            return render(request, 'app/book_f.html',{
+                'book_data': book_data,
+                'keyword': keyword
+            })
+
+        return render(request, 'app/index_f.html',{
+            'form': form
+        })
+
+class DetailView_f(View):
+    def get(self, request, *args, **kwargs):
+        
+        isbn = self.kwargs['isbn']
+        params = {
+            'isbn': isbn
+        }
+
+        items = get_api_data(params)
+        items = items[0]
+        item = items['Item']
+        title = item['title']
+        image = item['largeImageUrl']
+        author = item['author']
+        itemPrice = item['itemPrice']
+        salesDate = item['salesDate']
+        publisherName = item['publisherName']
+        size = item['size']
+        isbn = item['isbn']
+        itemCaption = item['itemCaption']
+        itemUrl = item['itemUrl']
+        reviewAverage = item['reviewAverage']
+        reviewCount = item['reviewCount']
+
+        syouhinnmei = title
+
+        book_date = {
+            'title': title,
+            'image': image,
+            'author': author,
+            'itemPrice': itemPrice,
+            'salesDate': salesDate,
+            'publisherName': publisherName,
+            'size': size,
+            'isbn': isbn,
+            'itemCaption': itemCaption,
+            'itemUrl': itemUrl,
+            'reviewAverage': reviewAverage,
+            'reviewCount': reviewCount, 
+            'average': float(reviewAverage) * 20           
+        }
+        
+        return render(request, 'app/detail_f.html',{
+            'book_data':book_date
+        })
+
+        
+
+
+    
+
+class ListView_f(ListView):
+    template_name = 'app/list_f.html'
+    model = App
+
+class CreateView_f(CreateView):
+    model = App#モデルを指定する
+    form_class = AppForm#フォームを指定する
+    template_name = "app/create_f.html"#テンプレートを指定する
+    success_url = reverse_lazy("list") #フォーム送信完了後の遷移ページを指定する
+
+
+    def get_initial(self):
+          initial = super().get_initial()
+          initial["product_name"] = syouhinnmei
+          initial["price"] = nedan
+          initial["url"] = yuarueru
+          return initial
+    
+
