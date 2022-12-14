@@ -22,28 +22,14 @@
 
             <tbody>
                 <tr>
-                    <td><img src="{{ book.image }}"></td>
-                    <td>{{ book.title }}</td>
+                    <td><img src="{{ book.image }}"></td> 
+                    <td>{{ book.itemName }}</td>
                     <td>価格：{{ book.itemPrice }}円</td>
                 </tr>
             </tbody>
           </table>
-          <a href="{% url 'detail' book.isbn %}" class="stretched-link"></a>
+          <a href="{% url 'detail' book.itemCode %}" class="stretched-link"></a>
         </div>
-
-            <!-- 
-            <div class="col-3 mb-3">
-                <div class="card img-thumbnail booklist h-100">
-                    <img src="{{ book.image }}" alt="" class="card-img-top card-thum">
-                    <div class="card-body text-center px-2 py-3">
-                        <h5 class="font-weight-bold">{{ book.title }}</h5>
-                        <h5 class="font-weight-bold">価格：{{ book.itemPrice }}円</h5>
-                    </div>
-                    <a href="{% url 'detail' book.isbn %}" class="stretched-link"></a>
-                </div>
-            </div>
-            -->
-
         {% endfor %}
 </div>
 

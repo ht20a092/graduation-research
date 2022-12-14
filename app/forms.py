@@ -5,6 +5,9 @@ from .models import App
 class SearchForm(forms.Form):
     title = forms.CharField(label='タイトル', max_length=200, required=True)
 
+class SearchFormm(forms.Form):
+    titlee = forms.CharField(label='タイトル', max_length=200, required=True)
+
 
 class AppForm(forms.ModelForm):
     class Meta:

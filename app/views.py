@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import (View, ListView,CreateView,DeleteView)
 from .models import App
 from .forms import SearchForm
+from .forms import SearchFormm
 from .forms import AppForm
 import json
 import requests
@@ -70,6 +71,7 @@ class IndexView(View):
             'form': form
         })
 
+
 class DetailView(View):
     def get(self, request, *args, **kwargs):
         
@@ -82,40 +84,41 @@ class DetailView(View):
         items = items[0]
         item = items['Item']
         itemName = item['itemName']
-        imageUrl = item['imageUrl']
-        author = item['author']
+        # imageUrl = item['imageUrl']
+        # author = item['author']
         itemPrice = item['itemPrice']
-        salesDate = item['salesDate']
-        publisherName = item['publisherName']
-        size = item['size']
+        # salesDate = item['salesDate']
+        # publisherName = item['publisherName']
+        # size = item['size']
         itemCode = item['itemCode']
         itemCaption = item['itemCaption']
         itemUrl = item['itemUrl']
-        reviewAverage = item['reviewAverage']
-        reviewCount = item['reviewCount']
+        # reviewAverage = item['reviewAverage']
+        # reviewCount = item['reviewCount']
 
 
 
         book_date = {
             
             'itemName': itemName,
-            'imageUrl': imageUrl,
-            'author': author,
+            # 'imageUrl': imageUrl,
+            # 'author': author,
             'itemPrice': itemPrice,
-            'salesDate': salesDate,
-            'publisherName': publisherName,
-            'size': size,
+            # 'salesDate': salesDate,
+            # 'publisherName': publisherName,
+            # 'size': size,
             'itemCode': itemCode,
             'itemCaption': itemCaption,
             'itemUrl': itemUrl,
-            'reviewAverage': reviewAverage,
-            'reviewCount': reviewCount, 
-            'average': float(reviewAverage) * 20           
+            # 'reviewAverage': reviewAverage,
+            # 'reviewCount': reviewCount, 
+            # 'average': float(reviewAverage) * 20           
         }
         
         return render(request, 'app/detail.html',{
             'book_data':book_date
         })
+
 
         
 
@@ -164,17 +167,17 @@ class IndexView_f(View):
 
     def get(self, request, *args, **kwargs):
         
-        form = SearchForm(request.POST or None)
+        form = SearchFormm(request.POST or None)
 
         return render(request, 'app/index_f.html', {
             'form': form,
         })
     
     def post(self, request, *args, **kwargs):
-        form = SearchForm(request.POST or None)
+        form = SearchFormm(request.POST or None)
 
         if form.is_valid():
-            keyword = form.cleaned_data['title']
+            keyword = form.cleaned_data['titlee']
             params = {
                 'title': keyword,
                 'hits' : 28,
@@ -203,6 +206,7 @@ class IndexView_f(View):
         return render(request, 'app/index_f.html',{
             'form': form
         })
+
 
 class DetailView_f(View):
     def get(self, request, *args, **kwargs):
