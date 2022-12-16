@@ -8,19 +8,23 @@
 <table class="table table-striped" >
   <thead>
     <tr>
+      <th scope="col">ID</th>
       <th scope="col">商品名</th>
       <th scope="col">値段</th>
       <th scope="col">URL</th>
       <th scope="col">設定</th>
+      <th scope="col">グラフ</th>
     </tr>
   </thead>
   <tbody>
     {% for item in object_list %}
     <tr>
+      <td>{{ item.id }}</td>
       <td>{{ item.product_name }}</td>
       <td>{{ item.price }}円</td>
       <td>{{ item.url }}</td>
       <td><a href="{% url 'delete' pk=item.id %}">削除</a></td>
+      <td><a href="{% url 'graph' %}">グラフ</a></td>
     </tr>
     {% endfor %}
   </tbody>

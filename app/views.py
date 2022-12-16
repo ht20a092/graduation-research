@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import (View, ListView,CreateView,DeleteView)
+from django.views.generic import (View, ListView,CreateView,DeleteView,TemplateView)
 from .models import App
 from .forms import SearchForm
 from .forms import SearchFormm
@@ -7,6 +7,18 @@ from .forms import AppForm
 import json
 import requests
 from django.urls import reverse_lazy
+
+from . import models
+from . import graph
+
+import matplotlib
+#バックエンドを指定
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import io
+from django.http import HttpResponse
+
+
 
 # 楽天商品
 SEARCH_URL = 'https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?format=json&applicationId=1072722666659103303'
@@ -132,10 +144,6 @@ class DetailView(View):
         })
 
     
-        
-
-
-    
 
 class ListView(ListView):
     template_name = 'app/list.html'
@@ -161,6 +169,63 @@ class DeleteView(DeleteView):
     template_name = 'app/delete.html'
     model = App
     success_url = reverse_lazy('list')
+
+
+
+
+
+# def setPlt():
+#     x = ["7 day ago","6 day ago","5 day ago", "4 day ago", "3 day ago", "2 day ago", "1 day ago"]
+#     y = [0, 0,0, 0, 3190, 3190, 3190]
+#     plt.bar(x, y, color='#00d5ff')
+#     plt.title(r"$\bf{Price Date}$", color='#3407ba')
+#     plt.xlabel("")
+#     plt.ylabel("price")
+
+# # SVG化
+# def plt2svg():
+#     buf = io.BytesIO()
+#     plt.savefig(buf, format='svg', bbox_inches='tight')
+#     s = buf.getvalue()
+#     buf.close()
+#     return s
+
+# # 実行するビュー関数
+# def get_svg(request):
+#     setPlt()  
+#     svg = plt2svg()  #SVG化
+#     plt.cla()  # グラフをリセット
+#     response = HttpResponse(svg, content_type='image/svg+xml')
+#     return response
+
+
+class graphView(TemplateView):
+
+    #テンプレートファイル連携
+    template_name = 'app/graph.html'
+
+    #変数としてグラフイメージをテンプレートに渡す
+    def get_context_data(self, **kwargs):
+
+        #グラフオブジェクト
+        qs    = models.App.objects.get(id=1)  #モデルクラス(Appテーブル)読込
+        # x     = [x.product_name for x in qs]           #X軸データ
+        x     = ["7 day ago","6 day ago","5 day ago", "4 day ago", "3 day ago", "2 day ago", "1 day ago"]         #X軸データ
+        # y     = [y.price for y in qs]        #Y軸データ
+        y     = [0, 0,0, 0, 3190, 3190, 3190]       #Y軸データ
+        chart = graph.Plot_Graph(x,y)          #グラフ作成
+
+        #変数を渡す
+        context = super().get_context_data(**kwargs)
+        context['chart'] = chart
+        return context
+
+    #get処理
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+
+
 
 
 

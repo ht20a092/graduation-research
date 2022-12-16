@@ -1,0 +1,11 @@
+{% extends 'app/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+
+<h1>過去五日間の価格</h1>
+	<img src="data:image/png;base64,{{ chart | safe }}">
+
+
+{% endblock %}
