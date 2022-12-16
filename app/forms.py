@@ -12,8 +12,9 @@ class SearchFormm(forms.Form):
 class AppForm(forms.ModelForm):
     class Meta:
         model = App
-        fields = ('product_name','price','url','itemCode') 
-        exclude = ('price1','price2','price3','price4','price5',)  #入力項目から商品名、値段、URLを除外
+        # fields = ('product_name','price','url','itemCode') 
+        fields = ('product_name','price','url','itemCode','price1','price2','price3','price4','price5',)
+        # exclude = ('price1','price2','price3','price4','price5',)  #入力項目から商品名、値段、URLを除外
 
     
 
