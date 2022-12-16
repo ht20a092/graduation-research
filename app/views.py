@@ -15,8 +15,10 @@ SEARCH_URL = 'https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?
 SEARCH_URLL = 'https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404?format=json&applicationId=1072722666659103303'
 
 syouhinnmei ='シリコンバレー一流プログラマーが教える　Pythonプロフェッショナル大全'
-nedan ='2860'
+nedan = 2860
 yuarueru ='https://books.rakuten.co.jp/rb/17201602/'
+cord = ''
+
 
 
 def get_api_data(params):
@@ -115,11 +117,21 @@ class DetailView(View):
             # 'average': float(reviewAverage) * 20           
         }
         
+        global syouhinnmei
+        global nedan
+        global yuarueru
+        global cord
+
+        syouhinnmei = itemName
+        nedan = itemPrice
+        yuarueru = itemUrl
+        cord = itemCode
+
         return render(request, 'app/detail.html',{
             'book_data':book_date
         })
 
-
+    
         
 
 
@@ -141,6 +153,7 @@ class CreateView(CreateView):
           initial["product_name"] = syouhinnmei
           initial["price"] = nedan
           initial["url"] = yuarueru
+          initial["itemCode"] = cord
           return initial
     
 
@@ -234,6 +247,7 @@ class DetailView_f(View):
         reviewCount = item['reviewCount']
 
 
+
         book_date = {
             
             'title': title,
@@ -248,21 +262,30 @@ class DetailView_f(View):
             'itemUrl': itemUrl,
             'reviewAverage': reviewAverage,
             'reviewCount': reviewCount, 
-            'average': float(reviewAverage) * 20           
+            'average': float(reviewAverage) * 20   ,
         }
-        
+
+        global syouhinnmei
+        global nedan
+        global yuarueru
+        global yuarueru
+
+        syouhinnmei = title
+        nedan = itemPrice
+        yuarueru = itemUrl
+
         return render(request, 'app/detail_f.html',{
             'book_data':book_date
         })
 
+
         
-
-
     
 
 class ListView_f(ListView):
     template_name = 'app/list_f.html'
     model = App
+
 
 class CreateView_f(CreateView):
     model = App#モデルを指定する
@@ -277,4 +300,4 @@ class CreateView_f(CreateView):
           initial["price"] = nedan
           initial["url"] = yuarueru
           return initial
-    
+
